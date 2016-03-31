@@ -1,0 +1,32 @@
+WireMock Manager: spawn & manage WM processes
+
+ --- Tool is internally stateless, with no special long-running processes or custom daemon
+ --- Tool determines state based on PWD structure and greping through 'ps -ef' (or similar tool)
+
+ --- Tool can list available API/Versions that can be run
+  ---- based on locally-available folder structure in PWD (api->version->mappings/files)
+  ---- List will show API & Version
+
+ --- spawn new mock servers via cmd like: wmm start service version
+  ---- exec's java -jar wiremock.jar w/ appropriate options, to run in the background
+  ---- sets the WM instance's working directory to the appropriate api-->version folder
+  ---- redirects exec stdout to a log file
+  ---- logs to created local directory based on api/version name combo
+
+ --- can list spawned WM Processes
+  ---- greps ps -ef for commands matching an expected pattern (java -jar wiremock etc)
+  ---- matches results from 'ps' to folders in log directory
+  ---- results from 'ps' that match folders in directory are "running"
+  ---- folders in directory that do not have an entry from 'ps' are "stopped"
+
+ --- can stop/remove spawned WM Processes
+  ---- stop cmd looks like: wmm stop service version
+  ---- tool greps through ps -ef for running commands that match expected pattern
+  ---- If found, running command is terminated.
+  ---- remove cmd deletes log directory
+
+ --- Consider using Docker instead of exec
+  ---- Dockerfile and Docker container makes distributing WireMock easier
+  ---- Docker manages process crap so I don't have to
+  ---- could use Nginx front-end, and would never need to worry about port conflicts
+   ----- this would require abandoning "no custom background process" paradigm, as tool would need to manage long-running nginx container
