@@ -33,6 +33,7 @@ wmm setup
 ```
 
 Workspace structure:
+'''
  [WorkingDir]
   -- services
   -- recordings
@@ -42,6 +43,8 @@ Workspace structure:
      -- [logs]
          -- [services]
          -- [recordings]
+'''
 
-if services or recordings is missing, directory structure is 'invalid'
-if [wmm/lib] or [wmm/logs] is missing, directory structure is 'uninitialized'
+If services or recordings is missing, directory structure is 'invalid'
+
+If [wmm/lib] or [wmm/logs] is missing, directory structure is 'uninitialized'
