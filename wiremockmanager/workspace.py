@@ -4,8 +4,10 @@ from wiremockmanager import config
 
 
 def get_dir_for_service(api, version):
-    return os.path.join(config.SERVICES_DIR, str(api), str(version))
-
+    service_dir = os.path.join(config.SERVICES_DIR, str(api), str(version))
+    if not os.path.exists(service_dir):
+        raise WorkspaceError('Could not find definition for {} {}'.format(api, version))
+    return service_dir
 
 def get_dir_for_recording(name, version):
     this_dir = os.path.join(config.RECORDINGS_DIR, str(name), str(version))
@@ -66,3 +68,7 @@ def _download_wiremock():
             status = r"%10d  [%3.2f%%]" % (downloaded_data_length, downloaded_data_length * 100. / file_size)
             status += chr(8) * (len(status) + 1)
             print status,
+
+
+class WorkspaceError(Exception):
+    pass
