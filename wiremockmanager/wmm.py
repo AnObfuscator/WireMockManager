@@ -102,7 +102,7 @@ def _print_table(instance_list):
 
 def main():
     parser = argh.ArghParser()
-    parser.add_commands([record, mock, stop, status])
+    parser.add_commands([record, mock, stop, status, setup_wmm_in_pwd])
     parser.dispatch()
 
 if __name__ == '__main__':

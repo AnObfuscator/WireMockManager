@@ -1,41 +1,21 @@
-# Workspace structure:
-# [WorkingDir]
-#  -- services
-#  -- recordings
-#  -- wmm
-#     -- [lib]
-#         -- [wiremock.jar]
-#     -- [logs]
-#         -- [services]
-#         -- [recordings]
-#
-# if services or recordings is missing, directory structure is 'invalid'
-# if [wmm/lib] or [wmm/logs] is missing, directory structure is 'uninitialized'
-#
-# create_at will create 'services' and 'recordings' directories in the given path
-#
-# intialize_at will create 'libs' (if missing) and download wiremock, and create 'logs' (if missing)
 import os
 import urllib2
 from wiremockmanager import config
 
 
 def get_dir_for_service(api, version):
-    service_dir = config.Config.get('workspace', 'SERVICE_DIR')
-    return '{}/{}/{}'.format(service_dir, api, version)
+    return '{}/{}/{}'.format(config.SERVICES_DIR, api, version)
 
 
 def get_dir_for_recording(name, version):
-    recordings_dir = config.Config.get('workspace', 'RECORDINGS_DIR')
-    this_dir = '{}/{}/{}'.format(recordings_dir, name, version)
+    this_dir = '{}/{}/{}'.format(config.RECORDINGS_DIR, name, version)
     if not os.path.exists(this_dir):
         os.makedirs(this_dir)
     return this_dir
 
 
 def get_log_file_location_for(api, version):
-    logs_dir = config.Config.get('workspace', 'LOG_DIR')
-    this_log_dir = '{}/{}/{}/'.format(logs_dir, api, version)
+    this_log_dir = '{}/{}/{}/'.format(config.LOG_DIR, api, version)
     if not (os.path.exists(this_log_dir)):
         os.makedirs(this_log_dir)
     log_name = 'wiremock.log'  # for now...
@@ -43,20 +23,16 @@ def get_log_file_location_for(api, version):
 
 
 def is_valid_directory_structure():
-    services_dir = config.Config.get('workspace', 'SERVICE_DIR')
-    recordings_dir = config.Config.get('workspace', 'RECORDINGS_DIR')
-    return os.path.exists(services_dir) and os.path.exists(recordings_dir)
+    return os.path.exists(config.SERVICES_DIR) and os.path.exists(config.RECORDINGS_DIR)
 
 
 def is_initialized():
-    logs_dir = config.Config.get('workspace', 'LOG_DIR')
-    wiremock_jar = config.Config.get('workspace', 'WIREMOCK_JAR')
-    return os.path.exists(logs_dir) and os.path.exists(wiremock_jar)
+    return os.path.exists(config.LOG_DIR) and os.path.exists(config.WIREMOCK_JAR_PATH)
 
 
 def create_valid_directory_structure():
     print('Creating WMM directory structure...')
-    required_dirs = [config.Config.get('workspace', 'SERVICE_DIR'), config.Config.get('workspace', 'RECORDINGS_DIR')]
+    required_dirs = [config.SERVICES_DIR, config.RECORDINGS_DIR]
     for req_dir in required_dirs:
         if not os.path.exists(req_dir):
             os.makedirs(req_dir)
@@ -64,25 +40,19 @@ def create_valid_directory_structure():
 
 def initialize():
     print('Initializing directory for wmm usage...')
-    logs_dir = config.Config.get('workspace', 'LOG_DIR')
-    path_to_wm_jar = config.Config.get('workspace', 'WIREMOCK_JAR_PATH')
-    if not os.path.exists(logs_dir):
-        os.makedirs(logs_dir)
-    if not os.path.exists(path_to_wm_jar):
+    if not os.path.exists(config.LOG_DIR):
+        os.makedirs(config.LOG_DIR)
+    if not os.path.exists(config.WIREMOCK_JAR_PATH):
         _download_wiremock()
 
 
 def _download_wiremock():
-    wiremock_download_url = config.Config.get('workspace', 'WM_JAR_URL')
-    libs_dir = config.Config.get('workspace', 'LIB_DIR')
-    wiremock_jar_name = config.Config.get('workspace', 'WM_JAR_NAME')
-    path_to_wm_jar = config.Config.get('workspace', 'WIREMOCK_JAR_PATH')
-    if not os.path.exists(libs_dir):
-        os.makedirs(libs_dir)
-    download_request = urllib2.urlopen(wiremock_download_url)
-    with open(path_to_wm_jar, 'wb') as wiremock_jar_file:
+    if not os.path.exists(config.LIB_DIR):
+        os.makedirs(config.LIB_DIR)
+    download_request = urllib2.urlopen(config.WM_JAR_URL)
+    with open(config.WIREMOCK_JAR_PATH, 'wb') as wiremock_jar_file:
         file_size = int(download_request.info().getheaders("Content-Length")[0])
-        print "Downloading: %s Bytes: %s" % (wiremock_jar_name, file_size)
+        print "Downloading: %s Bytes: %s" % (config.WM_JAR_NAME, file_size)
 
         downloaded_data_length = 0
         block_size = 8192
