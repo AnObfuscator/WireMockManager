@@ -16,8 +16,8 @@ dependency_links = [
 setuptools.setup(
     name="WireMock Manager",
     version="0.0.1.dev1",
-    author="Jonathan Evans",
-    author_email="jonathan.evans@rackspace.com",
+    author="AnObfuscator",
+    author_email="anobfuscator@gmail.com",
     description="A tool for managing WireMock instances and files.",
     long_description=LDINFO,
     packages=setuptools.find_packages(),
