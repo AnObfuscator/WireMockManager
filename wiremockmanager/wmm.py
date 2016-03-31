@@ -33,13 +33,16 @@ def mock(api, version, port, https_port):
     """
     Start an instance to mock of the specified API and version. This will serve the defined behaviors located in the
     directory 'services/[api]/[version]'.
+
+    If 'services/[api]/[version]' does not exist, this command will return with an error.
     """
-    playback_dir = workspace.get_dir_for_service(api, version)
-    log_file_location = workspace.get_log_file_location_for(api, version)
-    print(log_file_location)
     try:
+        playback_dir = workspace.get_dir_for_service(api, version)
+        log_file_location = workspace.get_log_file_location_for(api, version)
         instance = wiremock.start_mocking(playback_dir, log_file_location, port, https_port)
         _print_table([instance])
+    except workspace.WorkspaceError as wse:
+        print(wse.message)
     except wiremock.WireMockError as wme:
         print("Could not start WireMock instance. Please see log file for more details: {}".format(wme.message))
 
@@ -56,6 +59,8 @@ def record(port, https_port, url, name, version):
     """
     Start an instance to record the calls to the specified URL. The recorded interactions will be stored in the
     directory 'recordings/[name]/[version].
+
+    *Warning:* If 'recordings/[name]/[version]' already exists, some existing content may be overwritten.
     """
     if not version:
         version = time.time()

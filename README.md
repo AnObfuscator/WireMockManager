@@ -25,13 +25,18 @@ wmm mock --api=service_name --version=service_version --port=1234 --https-port=2
 ```
 
 Start an instance of WireMock to mock of the specified API and version. This will serve the defined behaviors located in the directory 'services/[api]/[version]'.
+If 'services/[api]/[version]' does not exist, this command will return with an error.
 
 ### Recording
 ```
 wmm record --url=http://url.to.service --name=[service_name] --version=[service_vesion]
 ```
 
-Start an instance to record the calls to the specified URL. The recorded interactions will be stored in the directory 'recordings/[name]/[version].
+Start an instance to record the calls to the specified URL. Name and version can be anything you like, as long as they are valid directory names for your OS. 
+The recorded interactions will be stored in the directory 'recordings/[name]/[version]'. 
+
+*Warning:* If 'recordings/[name]/[version]' already exists, some existing content may be overwritten. 
+
 
 ### Status
 ```
