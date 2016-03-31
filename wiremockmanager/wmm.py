@@ -30,7 +30,10 @@ def initialize_directory(func):
 @validate_directory
 @initialize_directory
 def mock(api, version, port, https_port):
-    """Start an instance to mock of the specified API & version."""
+    """
+    Start an instance to mock of the specified API and version. This will serve the defined behaviors located in the
+    directory 'services/[api]/[version]'.
+    """
     playback_dir = workspace.get_dir_for_service(api, version)
     log_file_location = workspace.get_log_file_location_for(api, version)
     print(log_file_location)
@@ -50,7 +53,10 @@ def mock(api, version, port, https_port):
 @validate_directory
 @initialize_directory
 def record(port, https_port, url, name, version):
-    """Start an instance to record the calls to the specified URL."""
+    """
+    Start an instance to record the calls to the specified URL. The recorded interactions will be stored in the
+    directory 'recordings/[name]/[version].
+    """
     if not version:
         version = time.time()
     rec_dir = workspace.get_dir_for_recording(name, version)
@@ -66,7 +72,9 @@ def record(port, https_port, url, name, version):
 @validate_directory
 @initialize_directory
 def stop():
-    """Stop running instances."""
+    """
+    Stop all running instances.
+    """
     instances = wiremock.get_instances()
     for proc in instances:
         proc.terminate()
@@ -75,7 +83,9 @@ def stop():
 @validate_directory
 @initialize_directory
 def status():
-    """Status of running instances."""
+    """
+    List all running instances.
+    """
     instances = wiremock.get_instances()
     if instances:
         _print_table(instances)
@@ -84,6 +94,13 @@ def status():
 
 @argh.decorators.named('setup')
 def setup_wmm_in_pwd():
+    """
+    Setup WMM folder structure in the current directory.
+
+    Specifically, this will create directories called 'services' and 'recordings', if they are missing. In addition,
+    this will create directories 'wmm/logs' and 'wmm/libs'. If the WireMock jar is not in 'wmm/libs', this will
+    download the WM jar into that directory.
+    """
     if not workspace.is_valid_directory_structure():
         workspace.create_valid_directory_structure()
     if not workspace.is_initialized():
