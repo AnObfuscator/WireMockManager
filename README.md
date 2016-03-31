@@ -1,40 +1,64 @@
-Introduction
+## Introduction
 
 WireMock Manager (WMM) is a tool for managing multiple WireMock instances, and managing the recorded or created output files in a consistent manner.
 WMM expects (and can create) a specific directory structure. It also needs a local copy of the standalone WireMock jar, which WMM will download if necessary.
 
-Installation
+## Installation
 
 Install with pip from GitHub:
+
 ```
 pip install -e git+https://github.com/AnObfuscator/WireMockManager.git#egg=WireMockManager
 ```
 
-Usage
+## Usage
+Note that you can also get usage help from the wmm command line:
 
 ```
-wmm start --api=service_name --version=service_version --port=1234 --https-port=2345
+wmm -h
+wmm [command] -h
 ```
 
+### Mocking
+```
+wmm mock --api=service_name --version=service_version --port=1234 --https-port=2345
+```
+
+Start an instance of WireMock to mock of the specified API and version. This will serve the defined behaviors located in the directory 'services/[api]/[version]'.
+
+### Recording
 ```
 wmm record --url=http://url.to.service --name=[service_name] --version=[service_vesion]
 ```
 
+Start an instance to record the calls to the specified URL. The recorded interactions will be stored in the directory 'recordings/[name]/[version].
+
+### Status
 ```
 wmm status
 ```
 
+List all running instances as a table, with type (record/mock), api, version, url (if recording), port, and https port.
+
+### Stop
 ```
 wmm stop
 ```
 
+Stop all running instances.
+
+### Setup
 ```
 wmm setup
 ```
 
-Workspace structure:
-'''
- [WorkingDir]
+Setup WMM folder structure in the current directory. Specifically, this will create directories called 'services' and 'recordings', if they are missing. 
+In addition, this will create directories 'wmm/logs' and 'wmm/libs'. If the WireMock jar is not in 'wmm/libs', this will download the WM jar into that directory.
+
+
+## WMM Directory Structure
+```
+(WorkingDir)
   -- services
   -- recordings
   -- wmm
@@ -43,8 +67,8 @@ Workspace structure:
      -- [logs]
          -- [services]
          -- [recordings]
-'''
+```
 
 If services or recordings is missing, directory structure is 'invalid'
 
-If [wmm/lib] or [wmm/logs] is missing, directory structure is 'uninitialized'
+If ```[wmm/lib]``` or ```[wmm/logs]``` is missing, directory structure is 'uninitialized'
