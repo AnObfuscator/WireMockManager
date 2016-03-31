@@ -84,7 +84,8 @@ def stop():
 @initialize_directory
 def status():
     """
-    List all running instances.
+    List all running instances as a table, with type (record/mock), api, version, url (if recording), port,
+    and https port.
     """
     instances = wiremock.get_instances()
     if instances:
