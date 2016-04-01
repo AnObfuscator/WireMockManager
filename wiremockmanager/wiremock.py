@@ -1,8 +1,8 @@
 import psutil
 import time
+import wiremockmanager.config as config
 
-
-base_cmd_array = ['java', '-jar', 'wiremock-1.57-standalone.jar', '--verbose']
+base_cmd_array = ['java', '-jar', config.WIREMOCK_JAR_PATH, '--verbose']
 
 
 def start_mocking(playback_dir, log_file_location, port, https_port):
