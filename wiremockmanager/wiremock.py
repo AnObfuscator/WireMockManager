@@ -1,3 +1,4 @@
+import os
 import psutil
 import time
 import wiremockmanager.config as config
@@ -6,24 +7,26 @@ base_cmd_array = ['java', '-jar', config.WIREMOCK_JAR_PATH, '--verbose']
 
 
 def start_mocking(playback_dir, log_file_location, port, https_port):
-    run_extensions = ['--port='+str(port), '--https-port='+str(https_port), '--root-dir='+playback_dir]
-    instance = _run_wiremock(playback_dir, log_file_location, run_extensions)
-    return instance
+    mock_extensions = ['--port='+str(port), '--https-port='+str(https_port), '--root-dir='+playback_dir]
+    return _run_wiremock(log_file_location, mock_extensions)
 
 
 def start_recording(recording_dir, log_file_location, port, https_port, url):
     rec_extensions = ['--port='+str(port), '--https-port='+str(https_port), '--root-dir='+recording_dir,
                       '--proxy-all='+url, '--record-mappings']
-    instance = _run_wiremock(recording_dir, log_file_location, rec_extensions)
-    return instance
+    return _run_wiremock(log_file_location, rec_extensions)
 
 
-def _run_wiremock(dir, log_name, extensions):
-    log_file_location = log_name  # '{}/{}'.format(dir, log_name)
+def _run_wiremock(log_file_location, extensions):
     log_file = open(log_file_location, mode='a')
+    log_file_start_size = os.path.getsize(log_file_location)
+
     cmd_array = base_cmd_array + extensions
     wm_proc = psutil.Popen(cmd_array, stdout=log_file, stderr=log_file)
-    time.sleep(1)  # yeah yeah, I know... I know...
+
+    while log_file_start_size == os.path.getsize(log_file_location):
+        time.sleep(1)  # wait for WireMock to write something to the log file
+
     if not wm_proc.status() == 'running':  # wm_proc.is_running() returns true, even if proc is zombie
         raise WireMockError(log_file_location)
     return WireMockInstance(wm_proc)
