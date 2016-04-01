@@ -48,14 +48,14 @@ def mock(api, version, port, https_port):
 
 
 @argh.decorators.named('record')
-@argh.arg('--port', default=0, help='HTTP port to use')
-@argh.arg('--https-port', default=0, help='HTTPS port to use')
 @argh.arg('--url', default='', help='URL to proxy')
 @argh.arg('--name', default='unknown', help='name of recorded API')
 @argh.arg('--version', default=None, help='Version of recorded API')
+@argh.arg('--port', default=0, help='HTTP port to use')
+@argh.arg('--https-port', default=0, help='HTTPS port to use')
 @validate_directory
 @initialize_directory
-def record(port, https_port, url, name, version):
+def record(url, name, version, port, https_port):
     """
     Start an instance to record the calls to the specified URL. The recorded interactions will be stored in the
     directory 'recordings/[name]/[version].
@@ -111,7 +111,7 @@ def setup_wmm_in_pwd():
         workspace.create_valid_directory_structure()
     if not workspace.is_initialized():
         workspace.initialize()
-    print('Current workspace is initialized')
+    print('Current workspace is setup and initialized')
 
 
 def _print_table(instance_list):
