@@ -9,6 +9,7 @@ def get_dir_for_service(api, version):
         raise WorkspaceError('Could not find definition for {} {}'.format(api, version))
     return service_dir
 
+
 def get_dir_for_recording(name, version):
     this_dir = os.path.join(config.RECORDINGS_DIR, str(name), str(version))
     if not os.path.exists(this_dir):
@@ -20,8 +21,8 @@ def get_log_file_location_for(api, version):
     this_log_dir = os.path.join(config.LOG_DIR, str(api), str(version))
     if not (os.path.exists(this_log_dir)):
         os.makedirs(this_log_dir)
-    log_name = 'wiremock.log'  # for now...
-    return this_log_dir + log_name
+    log_name = 'wiremock.log'
+    return os.path.join(this_log_dir, log_name)
 
 
 def is_valid_directory_structure():
