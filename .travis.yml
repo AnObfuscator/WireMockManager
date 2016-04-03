@@ -1,7 +1,8 @@
 language: python
 python:
   - "2.7"
-# command to install dependencies
+packages:
+  - openjdk-7-jdk
 install:
   - pip install -r requirements.txt
   - pip install -e .
