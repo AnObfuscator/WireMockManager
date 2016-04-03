@@ -36,10 +36,8 @@ def wmm_record_should_start_and_create_log():
                'Record  test            1  Running     7890        7891\n'
 
     log_file_path = os.path.join('wmm', 'logs', 'test', '1', 'wiremock.log')
+
     assert os.path.exists(log_file_path)
-    with open('wmm/logs/test/1/wiremock.log', 'r') as log_file:
-        for line in log_file:
-            print(line)
     assert_equal(expected, result)
 
 
@@ -51,7 +49,6 @@ def wmm_stop_should_terminate_all():
 
 
 if __name__ == '__main__':
-    print(run_command(['java', '-version']))
     setup_for_tests()
     wmm_uninitialied_status_should_return_uninitialized_error()
     wmm_setup_should_download_wm_and_create_directories()
