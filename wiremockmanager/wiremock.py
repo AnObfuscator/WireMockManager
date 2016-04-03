@@ -28,6 +28,7 @@ def _run_wiremock(log_file_location, extensions):
         time.sleep(1)  # wait for WireMock to write something to the log file
 
     if not wm_proc.status() == 'running':  # wm_proc.is_running() returns true, even if proc is zombie
+        print('WireMock status: {}'.format(wm_proc.status()))
         raise WireMockError(log_file_location)
     return WireMockInstance(wm_proc)
 
