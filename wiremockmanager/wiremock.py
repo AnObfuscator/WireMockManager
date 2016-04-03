@@ -27,8 +27,9 @@ def _run_wiremock(log_file_location, extensions):
     while log_file_start_size == os.path.getsize(log_file_location):
         time.sleep(1)  # wait for WireMock to write something to the log file
 
-    if not wm_proc.status() == 'running':  # wm_proc.is_running() returns true, even if proc is zombie
-        print('WireMock status: {}'.format(wm_proc.status()))
+    # Note: wm_proc.is_running() returns true, even if proc is zombie
+    valid_process_state = wm_proc.status() == 'running' or wm_proc.status() == 'sleeping'
+    if not valid_process_state:
         raise WireMockError(log_file_location)
     return WireMockInstance(wm_proc)
 
