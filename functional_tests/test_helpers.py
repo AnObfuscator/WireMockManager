@@ -38,6 +38,13 @@ def count_running_wiremocks():
     return count
 
 
+def print_file(path):
+    with open(path, 'r') as log_file:
+        for line in log_file:
+            print(line)
+
+
 def assert_equal(expected, actual):
     if not expected == actual:
         raise AssertionError('Expected result:\n {}\n Not equal to actual: \n{}\n'.format(expected, actual))
+

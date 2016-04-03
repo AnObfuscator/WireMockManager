@@ -36,6 +36,7 @@ def wmm_record_should_start_and_create_log():
                'Record  test            1  Running     7890        7891\n'
 
     log_file_path = os.path.join('wmm', 'logs', 'test', '1', 'wiremock.log')
+
     assert os.path.exists(log_file_path)
     assert_equal(expected, result)
 
