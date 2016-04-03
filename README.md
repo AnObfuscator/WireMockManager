@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/AnObfuscator/WireMockManager.svg?branch=master)](https://travis-ci.org/AnObfuscator/WireMockManager)
+
 ## Introduction
 
 WireMock Manager (WMM) is a tool for managing multiple WireMock instances, and managing the recorded or created output files in a consistent manner. WMM expects (and can create) a specific directory structure. It also needs a local copy of the standalone WireMock jar, which WMM will download if necessary.
