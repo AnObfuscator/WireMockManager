@@ -6,4 +6,4 @@ install:
   - pip install -r requirements.txt
   - pip install -e .
 # command to run tests
-script: functional_tests/tests.py
+script: python functional_tests/tests.py
