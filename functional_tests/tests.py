@@ -38,7 +38,8 @@ def wmm_record_should_start_and_create_log():
     log_file_path = os.path.join('wmm', 'logs', 'test', '1', 'wiremock.log')
     assert os.path.exists(log_file_path)
     with open('wmm/logs/test/1/wiremock.log', 'r') as log_file:
-        print(log_file.readall())
+        for line in log_file:
+            print(line)
     assert_equal(expected, result)
 
 
