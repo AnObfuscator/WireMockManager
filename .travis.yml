@@ -3,7 +3,7 @@ python:
   - "2.7"
 # command to install dependencies
 install:
-  - pip install --user -r requirements.txt
-  - pip install --user .
+  - pip install -r requirements.txt
+  - pip install -e .
 # command to run tests
 script: functional_tests/tests.py
