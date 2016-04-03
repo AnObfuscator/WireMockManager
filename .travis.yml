@@ -7,4 +7,6 @@ install:
   - pip install -r requirements.txt
   - pip install -e .
 # command to run tests
-script: python functional_tests/tests.py
+script:
+  - python -m unittest wiremockmanager
+  - python functional_tests/tests.py
