@@ -44,6 +44,10 @@ def print_file(path):
             print(line)
 
 
+def make_service_dir(api, version):
+    api_dir = os.path.join('services', api, version)
+    os.makedirs(api_dir)
+
 def assert_equal(expected, actual):
     if not expected == actual:
         raise AssertionError('Expected result:\n {}\n Not equal to actual: \n{}\n'.format(expected, actual))
