@@ -48,6 +48,7 @@ def wmm_stop_should_terminate_all():
 
 
 if __name__ == '__main__':
+    print(run_command(['java', '-version']))
     setup_for_tests()
     wmm_uninitialied_status_should_return_uninitialized_error()
     wmm_setup_should_download_wm_and_create_directories()
