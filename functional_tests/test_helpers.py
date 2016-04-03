@@ -36,3 +36,8 @@ def count_running_wiremocks():
         except:
             pass
     return count
+
+
+def assert_equal(expected, actual):
+    if not expected == actual:
+        raise AssertionError('Expected result:\n {}\n Not equal to actual: \n{}\n'.format(expected, actual))
