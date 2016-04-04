@@ -22,7 +22,7 @@ setuptools.setup(
     description="A tool for managing WireMock instances and files.",
     long_description=LDINFO,
     packages=setuptools.find_packages(),
-    url="",
+    url="https://github.com/AnObfuscator/WireMockManager",
     dependency_links=dependency_links,
     install_requires=required,
     classifiers=[
