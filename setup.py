@@ -4,15 +4,18 @@ import setuptools
 with open('README.md', 'rb') as r_file:
     LDINFO = r_file.read()
 
+# TODO remove pip install dependency on mock
 required = [
     "psutil",
     "argh",
-    "tabulate"
+    "tabulate",
+    "mock"
 ]
 
 dependency_links = [
 ]
 
+# TODO remove tests from pip installed files
 setuptools.setup(
     name="WireMock Manager",
     version="0.0.1.dev1",
@@ -20,9 +23,9 @@ setuptools.setup(
     author_email="anobfuscator@gmail.com",
     description="A tool for managing WireMock instances and files.",
     long_description=LDINFO,
-    # packages=setuptools.find_packages(),
-    package_dir={'':'wiremockmanager'},
-    packages=setuptools.find_packages("wiremockmanager", exclude=["test"]),
+    packages=setuptools.find_packages(),
+    # package_dir={'':'wiremockmanager'},
+    # packages=setuptools.find_packages("wiremockmanager", exclude=["test"]),
     url="https://github.com/AnObfuscator/WireMockManager",
     dependency_links=dependency_links,
     install_requires=required,
