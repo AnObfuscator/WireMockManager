@@ -8,5 +8,5 @@ install:
   - pip install -e .
 # command to run tests
 script:
-  - python -m unittest wiremockmanager
+  - python -m unittest discover
   - python functional_tests/tests.py
