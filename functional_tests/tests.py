@@ -16,7 +16,9 @@ def wmm_uninitialized_status_should_return_uninitialized_error():
 def wmm_setup_should_download_wm_and_create_directories():
     result = run_command(['wmm', 'setup'])
 
-    expected_start = 'Creating WMM directory structure...\nInitializing directory for wmm usage...\nDownloading: wiremock-1.57-standalone.jar Bytes: 6935826'
+    expected_start = 'Creating WMM directory structure...\n' + \
+                     'Initializing directory for wmm usage...\n' + \
+                     'Downloading: wiremock-1.57-standalone.jar Bytes: 6935826'
     expected_end = 'Current workspace is setup and initialized\n'
 
     assert result.startswith(expected_start)
@@ -34,7 +36,8 @@ def wmm_initialized_status_should_show_no_running_instances():
 
 
 def wmm_record_1_should_start_and_create_log():
-    result = run_command(['wmm', 'record', '--url=http://example.com', '--port=7890', '--https-port=7891', '--name=test', '--version=1'])
+    result = run_command(['wmm', 'record', '--url=http://example.com', '--port=7890', '--https-port=7891',
+                          '--name=test', '--version=1'])
 
     expected = 'Type    Name      Version  Status      Port    TLS Port\n' + \
                '------  ------  ---------  --------  ------  ----------\n' + \
@@ -47,7 +50,8 @@ def wmm_record_1_should_start_and_create_log():
 
 
 def wmm_record_2_should_start_and_create_log():
-    result = run_command(['wmm', 'record', '--url=http://example.com', '--port=7892', '--https-port=7893', '--name=test', '--version=2'])
+    result = run_command(['wmm', 'record', '--url=http://example.com', '--port=7892', '--https-port=7893',
+                          '--name=test', '--version=2'])
 
     expected = 'Type    Name      Version  Status      Port    TLS Port\n' + \
                '------  ------  ---------  --------  ------  ----------\n' + \
@@ -60,7 +64,8 @@ def wmm_record_2_should_start_and_create_log():
 
 
 def wmm_record_3_should_fail():
-    result = run_command(['wmm', 'record', '--url=http://example.com', '--port=7892', '--https-port=7893', '--name=test', '--version=3'])
+    result = run_command(['wmm', 'record', '--url=http://example.com', '--port=7892', '--https-port=7893',
+                          '--name=test', '--version=3'])
 
     expected = 'Could not start WireMock instance. Please see log file for more details: wmm/logs/test/3/wiremock.log\n'
 
