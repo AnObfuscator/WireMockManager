@@ -7,8 +7,7 @@ with open('README.md', 'rb') as r_file:
 required = [
     "psutil",
     "argh",
-    "tabulate",
-    "mock"
+    "tabulate"
 ]
 
 dependency_links = [
@@ -21,7 +20,9 @@ setuptools.setup(
     author_email="anobfuscator@gmail.com",
     description="A tool for managing WireMock instances and files.",
     long_description=LDINFO,
-    packages=setuptools.find_packages(),
+    # packages=setuptools.find_packages(),
+    package_dir={'':'wiremockmanager'},
+    packages=setuptools.find_packages("wiremockmanager", exclude=["test"]),
     url="https://github.com/AnObfuscator/WireMockManager",
     dependency_links=dependency_links,
     install_requires=required,
