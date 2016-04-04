@@ -7,7 +7,8 @@ with open('README.md', 'rb') as r_file:
 required = [
     "psutil",
     "argh",
-    "tabulate"
+    "tabulate",
+    "mock"
 ]
 
 dependency_links = [
