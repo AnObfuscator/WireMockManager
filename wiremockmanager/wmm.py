@@ -11,7 +11,7 @@ def validate_directory(func):
         if workspace.is_valid_directory_structure():
             return func(**kwargs)
         else:
-            print("Current directory does not appear to be a valid WMM working directory.")
+            _print_message("Current directory does not appear to be a valid WMM working directory.")
     return wrapper
 
 
@@ -42,9 +42,9 @@ def mock(api, version, port, https_port):
         instance = wiremock.start_mocking(playback_dir, log_file_location, port, https_port)
         _print_table([instance])
     except workspace.WorkspaceError as wse:
-        print(wse.message)
+        _print_message(wse.message)
     except wiremock.WireMockError as wme:
-        print("Could not start WireMock instance. Please see log file for more details: {}".format(wme.message))
+        _print_message("Could not start WireMock instance. Please see log file for more details: {}".format(wme.message))
 
 
 @argh.decorators.named('record')
@@ -70,7 +70,7 @@ def record(url, name, version, port, https_port):
         instance = wiremock.start_recording(rec_dir, log_file_location, port, https_port, url)
         _print_table([instance])
     except wiremock.WireMockError as wme:
-        print("Could not start WireMock instance. Please see log file for more details: {}".format(wme.message))
+        _print_message("Could not start WireMock instance. Please see log file for more details: {}".format(wme.message))
 
 
 @argh.decorators.named('stop')
@@ -96,7 +96,7 @@ def status():
     if instances:
         _print_table(instances)
     else:
-        print("No running instances.")
+        _print_message("No running instances.")
 
 @argh.decorators.named('setup')
 def setup_wmm_in_pwd():
@@ -111,7 +111,7 @@ def setup_wmm_in_pwd():
         workspace.create_valid_directory_structure()
     if not workspace.is_initialized():
         workspace.initialize()
-    print('Current workspace is setup and initialized')
+    _print_message('Current workspace is setup and initialized')
 
 
 def _print_table(instance_list):
@@ -121,6 +121,10 @@ def _print_table(instance_list):
         instance_table.append(instance_row)
     table_header = ['Type', 'Name', 'Version', 'Status', 'Port', 'TLS Port']
     print(tabulate(instance_table, headers=table_header))
+
+
+def _print_message(message):
+    print(message)
 
 
 def main():
