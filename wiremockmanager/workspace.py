@@ -1,9 +1,10 @@
 import os
 import urllib2
-from wiremockmanager import config
+import wiremockmanager.configuration
 
 
 def get_dir_for_service(api, version):
+    config = wiremockmanager.configuration.get()
     service_dir = os.path.join(config.SERVICES_DIR, str(api), str(version))
     if not os.path.exists(service_dir):
         raise WorkspaceError('Could not find definition for {} {}'.format(api, version))
@@ -11,6 +12,7 @@ def get_dir_for_service(api, version):
 
 
 def get_dir_for_recording(name, version):
+    config = wiremockmanager.configuration.get()
     this_dir = os.path.join(config.RECORDINGS_DIR, str(name), str(version))
     if not os.path.exists(this_dir):
         os.makedirs(this_dir)
@@ -18,6 +20,7 @@ def get_dir_for_recording(name, version):
 
 
 def get_log_file_location_for(api, version):
+    config = wiremockmanager.configuration.get()
     this_log_dir = os.path.join(config.LOG_DIR, str(api), str(version))
     if not (os.path.exists(this_log_dir)):
         os.makedirs(this_log_dir)
@@ -26,15 +29,18 @@ def get_log_file_location_for(api, version):
 
 
 def is_valid_directory_structure():
+    config = wiremockmanager.configuration.get()
     return os.path.exists(config.SERVICES_DIR) and os.path.exists(config.RECORDINGS_DIR)
 
 
 def is_initialized():
+    config = wiremockmanager.configuration.get()
     return os.path.exists(config.LOG_DIR) and os.path.exists(config.WIREMOCK_JAR_PATH)
 
 
 def create_valid_directory_structure():
     print('Creating WMM directory structure...')
+    config = wiremockmanager.configuration.get()
     required_dirs = [config.SERVICES_DIR, config.RECORDINGS_DIR]
     for req_dir in required_dirs:
         if not os.path.exists(req_dir):
@@ -43,6 +49,7 @@ def create_valid_directory_structure():
 
 def initialize():
     print('Initializing directory for wmm usage...')
+    config = wiremockmanager.configuration.get()
     if not os.path.exists(config.LOG_DIR):
         os.makedirs(config.LOG_DIR)
     if not os.path.exists(config.WIREMOCK_JAR_PATH):
@@ -50,6 +57,7 @@ def initialize():
 
 
 def _download_wiremock():
+    config = wiremockmanager.configuration.get()
     if not os.path.exists(config.LIB_DIR):
         os.makedirs(config.LIB_DIR)
     download_request = urllib2.urlopen(config.WM_JAR_URL)

@@ -3,16 +3,27 @@ import shutil
 import subprocess
 import psutil
 
+_env = {}
 
-def create_and_set_working_dir(new_dir):
+def create_and_enter_working_dir(new_dir):
+    _create_working_dir(new_dir)
+    os.chdir(new_dir)
+    if 'WMM_WORKING_DIR' in _env:
+        _env.__delitem__('WMM_WORKING_DIR')
+
+
+def create_working_dir_and_set_env(new_dir):
+    _create_working_dir(new_dir)
+    _env['WMM_WORKING_DIR'] = new_dir
+
+def _create_working_dir(new_dir):
     if os.path.exists(new_dir):
         shutil.rmtree(new_dir)
     os.makedirs(new_dir)
-    os.chdir(new_dir)
 
 
 def run_command(command):
-    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=_env)
     return ''.join(iter(p.stdout.readline, b''))
 
 

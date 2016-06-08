@@ -1,10 +1,5 @@
 from test_helpers import *
-from wiremockmanager import config
-
-
-def setup_for_tests():
-    create_and_set_working_dir('wmm_test_dir')
-    stop_running_wiremocks()
+import wiremockmanager.configuration
 
 
 def wmm_uninitialized_status_should_return_uninitialized_error():
@@ -23,6 +18,8 @@ def wmm_setup_should_download_wm_and_create_directories():
 
     assert result.startswith(expected_start)
     assert result.endswith(expected_end)
+
+    config = wiremockmanager.configuration.get()
     assert os.path.exists(config.WIREMOCK_JAR_PATH)
     assert os.path.exists(config.LOG_DIR)
     assert os.path.exists(config.SERVICES_DIR)
@@ -138,9 +135,7 @@ def wmm_stop_should_terminate_all():
     # assert result == 0
 
 
-if __name__ == '__main__':
-    setup_for_tests()
-
+def run_all_tests():
     wmm_uninitialized_status_should_return_uninitialized_error()
     wmm_setup_should_download_wm_and_create_directories()
     wmm_initialized_status_should_show_no_running_instances()
@@ -157,5 +152,16 @@ if __name__ == '__main__':
 
     wmm_stop_should_terminate_all()
     #wmm_initialized_status_should_show_no_running_instances()
+
+if __name__ == '__main__':
+    stop_running_wiremocks()
+
+    create_and_enter_working_dir('wmm_test_dir')
+    run_all_tests()
+
+    # TODO figure out how to test with env variable
+    # os.chdir('..')
+    # create_working_dir_and_set_env('wmm_test_dir_2')
+    # run_all_tests()
 
     stop_running_wiremocks()

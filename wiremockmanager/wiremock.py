@@ -1,9 +1,7 @@
 import os
 import psutil
 import time
-import wiremockmanager.config as config
-
-base_cmd_array = ['java', '-jar', config.WIREMOCK_JAR_PATH, '--verbose']
+import wiremockmanager.configuration
 
 
 def start_mocking(playback_dir, log_file_location, port, https_port):
@@ -21,6 +19,8 @@ def _run_wiremock(log_file_location, extensions):
     log_file = open(log_file_location, mode='a')
     log_file_start_size = os.path.getsize(log_file_location)
 
+    config = wiremockmanager.configuration.get()
+    base_cmd_array = ['java', '-jar', config.WIREMOCK_JAR_PATH, '--verbose']
     cmd_array = base_cmd_array + extensions
     wm_proc = psutil.Popen(cmd_array, stdout=log_file, stderr=log_file)
 
