@@ -71,9 +71,9 @@ class WireMockInstance:
         params['port'] = arg_list[4].split('=')[1]
         params['tls_port'] = arg_list[5].split('=')[1]
         dir_as_array = arg_list[6].split('=')[1].split('/')
-        params['type'] = 'Mock' if dir_as_array[0] == 'services' else 'Record'
-        params['name'] = dir_as_array[1]
-        params['version'] = dir_as_array[2]
+        params['type'] = 'Mock' if dir_as_array[-3] == 'services' else 'Record'
+        params['name'] = dir_as_array[-2]
+        params['version'] = dir_as_array[-1]
         return params
 
 

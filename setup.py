@@ -9,7 +9,8 @@ required = [
     "psutil",
     "argh",
     "tabulate",
-    "mock"
+    "mock",
+    "pyyaml"
 ]
 
 dependency_links = [

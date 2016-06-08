@@ -2,3 +2,4 @@ mock
 psutil
 argh
 tabulate
+pyyaml

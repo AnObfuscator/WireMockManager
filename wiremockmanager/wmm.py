@@ -1,5 +1,6 @@
 import argh
 import time
+import yaml
 from wiremockmanager import workspace
 from wiremockmanager import wiremock
 
@@ -37,14 +38,19 @@ def mock(api, version, port, https_port):
     If 'services/[api]/[version]' does not exist, this command will return with an error.
     """
     try:
-        playback_dir = workspace.get_dir_for_service(api, version)
-        log_file_location = workspace.get_log_file_location_for(api, version)
-        instance = wiremock.start_mocking(playback_dir, log_file_location, port, https_port)
+        instance = _mock(api, version, port, https_port)
         _print_table([instance])
     except workspace.WorkspaceError as wse:
         _print_message(wse.message)
     except wiremock.WireMockError as wme:
         _print_message("Could not start WireMock instance. Please see log file for more details: {}".format(wme.message))
+
+
+def _mock(api, version, port, https_port):
+    playback_dir = workspace.get_dir_for_service(api, version)
+    log_file_location = workspace.get_log_file_location_for(api, version)
+    instance = wiremock.start_mocking(playback_dir, log_file_location, port, https_port)
+    return instance
 
 
 @argh.decorators.named('record')
@@ -62,16 +68,50 @@ def record(url, name, version, port, https_port):
 
     *Warning:* If 'recordings/[name]/[version]' already exists, some existing content may be overwritten.
     """
-    if not version:
-        version = time.time()
-    rec_dir = workspace.get_dir_for_recording(name, version)
-    log_file_location = workspace.get_log_file_location_for(name, version)
     try:
-        instance = wiremock.start_recording(rec_dir, log_file_location, port, https_port, url)
+        instance = _record(url, name, version, port, https_port)
         _print_table([instance])
     except wiremock.WireMockError as wme:
         _print_message("Could not start WireMock instance. Please see log file for more details: {}".format(wme.message))
 
+
+def _record(url, name, version, port, https_port):
+    if not version:
+        version = time.time()
+    rec_dir = workspace.get_dir_for_recording(name, version)
+    log_file_location = workspace.get_log_file_location_for(name, version)
+    instance = wiremock.start_recording(rec_dir, log_file_location, port, https_port, url)
+    return instance
+
+
+@argh.decorators.named('start-group')
+@argh.arg('--group-file', default='', help='')
+@validate_directory
+@initialize_directory
+def start_group(group_file):
+    """
+    Start all instances of wiremock as defined in the yaml group file.
+
+    :param group_file:
+    """
+    group = None
+    with open(group_file) as gf:
+        group = yaml.safe_load(gf)
+    instances = []
+    for name in group:
+        wmm_def = group[name]
+        if wmm_def['type'] == 'mock':
+            print("starting mock for {}".format(name))
+            instance = _mock(wmm_def['api'], wmm_def['version'], wmm_def['port'], wmm_def['https-port'])
+            instances.append(instance)
+        elif wmm_def['type'] == 'record':
+            print("starting record for {}".format(name))
+            instance = _record(wmm_def['url'], wmm_def['name'], wmm_def['version'], wmm_def['port'], wmm_def['https-port'])
+            instances.append(instance)
+        else:
+            _print_message("Could not start {}: invalid type.".format(name))
+
+    _print_table(instances)
 
 @argh.decorators.named('stop')
 @validate_directory
@@ -129,7 +169,7 @@ def _print_message(message):
 
 def main():
     parser = argh.ArghParser()
-    parser.add_commands([record, mock, stop, status, setup_wmm_in_pwd])
+    parser.add_commands([record, mock, start_group, stop, status, setup_wmm_in_pwd])
     parser.dispatch()
 
 if __name__ == '__main__':
