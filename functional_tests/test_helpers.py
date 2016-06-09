@@ -23,7 +23,7 @@ def _create_working_dir(new_dir):
 
 
 def run_command(command):
-    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=_env)
+    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     return ''.join(iter(p.stdout.readline, b''))
 
 
