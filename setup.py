@@ -19,7 +19,7 @@ dependency_links = [
 # TODO remove tests from pip installed files
 setuptools.setup(
     name="WireMock Manager",
-    version="0.0.1.dev1",
+    version="0.0.2.dev",
     author="AnObfuscator",
     author_email="anobfuscator@gmail.com",
     description="A tool for managing WireMock instances and files.",
