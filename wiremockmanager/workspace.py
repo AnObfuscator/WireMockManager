@@ -7,7 +7,7 @@ def get_dir_for_service(api, version):
     config = wiremockmanager.configuration.get()
     service_dir = os.path.join(config.SERVICES_DIR, str(api), str(version))
     if not os.path.exists(service_dir):
-        raise WorkspaceError('Could not find definition for {} {}'.format(api, version))
+        os.makedirs(service_dir)
     return service_dir
 
 
