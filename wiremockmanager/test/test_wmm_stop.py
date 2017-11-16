@@ -33,7 +33,7 @@ class WmmStopTest(unittest.TestCase):
 
         workspace_mock.is_valid_directory_structure.assert_called_once()
         workspace_mock.is_initialized.assert_called_once()
-        workspace_mock.initialize.assert_called_once()
+        workspace_mock.initialize.assert_not_called()
         wiremock_mock.get_instances.assert_called_once()
         print_msg_mock.assert_not_called()
 
@@ -52,7 +52,7 @@ class WmmStopTest(unittest.TestCase):
 
         workspace_mock.is_valid_directory_structure.assert_called_once()
         workspace_mock.is_initialized.assert_called_once()
-        workspace_mock.initialize.assert_called_once()
+        workspace_mock.initialize.assert_not_called()
         wiremock_mock.get_instances.assert_called_once()
         print_msg_mock.assert_not_called()
         for mock_inst in mock_instances:
@@ -89,5 +89,5 @@ class WmmStopTest(unittest.TestCase):
         workspace_mock.is_initialized.assert_called_once()
         workspace_mock.initialize.assert_called_once()
         wiremock_mock.get_instances.assert_called_once()
-        print_table_mock.assert_called_once()
+        print_table_mock.assert_not_called()
         print_msg_mock.assert_not_called()
