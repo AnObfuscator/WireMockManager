@@ -5,6 +5,7 @@ import psutil
 
 _env = {}
 
+
 def create_and_enter_working_dir(new_dir):
     _create_working_dir(new_dir)
     os.chdir(new_dir)
@@ -15,6 +16,7 @@ def create_and_enter_working_dir(new_dir):
 def create_working_dir_and_set_env(new_dir):
     _create_working_dir(new_dir)
     _env['WMM_WORKING_DIR'] = new_dir
+
 
 def _create_working_dir(new_dir):
     if os.path.exists(new_dir):
@@ -58,6 +60,7 @@ def print_file(path):
 def make_service_dir(api, version):
     api_dir = os.path.join('services', api, version)
     os.makedirs(api_dir)
+
 
 def assert_equal(expected, actual):
     if not expected == actual:

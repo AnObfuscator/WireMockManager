@@ -16,6 +16,6 @@ class WmmConfig:
         self.SERVICE_LOG_DIR = os.path.join(self.LOG_DIR, 'services')
         self.RECORDING_LOG_DIR = os.path.join(self.LOG_DIR, 'recordings')
         self.LIB_DIR = os.path.join(self.WMM_DIR, 'libs')
-        self.WM_JAR_NAME = 'wiremock-1.57-standalone.jar'
+        self.WM_JAR_NAME = 'wiremock-standalone-2.11.0.jar'
         self.WIREMOCK_JAR_PATH = os.path.join(self.LIB_DIR, self.WM_JAR_NAME)
-        self.WM_JAR_URL = 'http://repo1.maven.org/maven2/com/github/tomakehurst/wiremock/1.57/wiremock-1.57-standalone.jar'
+        self.WM_JAR_URL = 'http://repo1.maven.org/maven2/com/github/tomakehurst/wiremock-standalone/2.11.0/wiremock-standalone-2.11.0.jar'

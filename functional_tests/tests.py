@@ -13,7 +13,7 @@ def wmm_setup_should_download_wm_and_create_directories():
 
     expected_start = 'Creating WMM directory structure...\n' + \
                      'Initializing directory for wmm usage...\n' + \
-                     'Downloading: wiremock-1.57-standalone.jar Bytes: 6935826'
+                     'Downloading: wiremock-standalone-2.11.0.jar Bytes: '
     expected_end = 'Current workspace is setup and initialized\n'
 
     assert result.startswith(expected_start)
