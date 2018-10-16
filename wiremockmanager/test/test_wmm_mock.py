@@ -43,7 +43,7 @@ class WmmMockTest(unittest.TestCase):
         workspace_mock.initialize.assert_not_called()
         workspace_mock.get_dir_for_service.assert_called_once_with('test-api', 'test-version')
         workspace_mock.get_log_file_location_for.assert_called_once_with('test-api', 'test-version')
-        wiremock_mock.start_mocking.assert_called_once_with('service/dir', 'some/log/file.log', 1234, 5678)
+        wiremock_mock.start_mocking.assert_called_once_with('service/dir', 'some/log/file.log', 1234, 5678, None, None)
         print_table_mock.assert_called_once()
         print_msg_mock.assert_not_called()
 
@@ -81,7 +81,7 @@ class WmmMockTest(unittest.TestCase):
         workspace_mock.initialize.assert_not_called()
         workspace_mock.get_dir_for_service.assert_called_once_with('test-api', 'test-version')
         workspace_mock.get_log_file_location_for.assert_called_once_with('test-api', 'test-version')
-        wiremock_mock.start_mocking.assert_called_once_with('service/dir', 'some/log/file.log', 1234, 5678)
+        wiremock_mock.start_mocking.assert_called_once_with('service/dir', 'some/log/file.log', 1234, 5678, None, None)
         print_table_mock.assert_not_called()
         print_msg_mock.assert_called_once_with('Could not start WireMock instance. Please see log file for more details: {}'.format('error.log'))
 
@@ -119,6 +119,6 @@ class WmmMockTest(unittest.TestCase):
         workspace_mock.initialize.assert_called_once()
         workspace_mock.get_dir_for_service.assert_called_once_with('test-api', 'test-version')
         workspace_mock.get_log_file_location_for.assert_called_once_with('test-api', 'test-version')
-        wiremock_mock.start_mocking.assert_called_once_with('service/dir', 'some/log/file.log', 1234, 5678)
+        wiremock_mock.start_mocking.assert_called_once_with('service/dir', 'some/log/file.log', 1234, 5678, None, None)
         print_table_mock.assert_called_once()
         print_msg_mock.assert_not_called()

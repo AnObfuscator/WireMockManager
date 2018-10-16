@@ -4,14 +4,30 @@ import time
 import wiremockmanager.configuration
 
 
-def start_mocking(playback_dir, log_file_location, port, https_port):
-    mock_extensions = ['--port='+str(port), '--https-port='+str(https_port), '--root-dir='+playback_dir]
+def start_mocking(playback_dir, log_file_location, port, https_port, https_keystore, keystore_password):
+    mock_extensions = []
+    mock_extensions.append('--port={}'.format(str(port)))
+    mock_extensions.append('--https-port={}'.format(str(https_port)))
+    mock_extensions.append('--root-dir={}'.format(playback_dir))
+    if https_keystore:
+        mock_extensions.append('--https-keystore={}'.format(https_keystore))
+    if keystore_password:
+        mock_extensions.append('--keystore-password={}'.format(keystore_password))
+
     return _run_wiremock(log_file_location, mock_extensions)
 
 
-def start_recording(recording_dir, log_file_location, port, https_port, url):
-    rec_extensions = ['--port='+str(port), '--https-port='+str(https_port), '--root-dir='+recording_dir,
-                      '--proxy-all='+url, '--record-mappings']
+def start_recording(recording_dir, log_file_location, port, https_port, url, https_keystore, keystore_password):
+    rec_extensions = []
+    rec_extensions.append('--port={}'.format(str(port)))
+    rec_extensions.append('--https-port={}'.format(str(https_port)))
+    rec_extensions.append('--root-dir={}'.format(recording_dir))
+    rec_extensions.append('--proxy-all={}'.format(url))
+    if https_keystore:
+        rec_extensions.append('--https-keystore={}'.format(https_keystore))
+    if keystore_password:
+        rec_extensions.append('--keystore-password={}'.format(keystore_password))
+    rec_extensions.append('--record-mappings')
     return _run_wiremock(log_file_location, rec_extensions)
 
 

@@ -23,14 +23,17 @@ def initialize_directory(func):
         return func(**kwargs)
     return wrapper
 
+
 @argh.decorators.named('mock')
 @argh.arg('--api', default='', help='API folder name')
 @argh.arg('--version', default='', help='Version folder name')
 @argh.arg('--port', default=0, help='HTTP port to use')
 @argh.arg('--https-port', default=0, help='HTTPS port to use')
+@argh.arg('--https-keystore', default='', help='keystore file containing an SSL certificate')
+@argh.arg('--keystore-password', default='', help='Password to the keystore, if something other than password.')
 @validate_directory
 @initialize_directory
-def mock(api, version, port, https_port):
+def mock(api, version, port, https_port, https_keystore=None, keystore_password=None):
     """
     Start an instance to mock of the specified API and version. This will serve the defined behaviors located in the
     directory 'services/[api]/[version]'.
@@ -38,7 +41,7 @@ def mock(api, version, port, https_port):
     If 'services/[api]/[version]' does not exist, this command will return with an error.
     """
     try:
-        instance = _mock(api, version, port, https_port)
+        instance = _mock(api, version, port, https_port, https_keystore, keystore_password)
         _print_table([instance])
     except workspace.WorkspaceError as wse:
         _print_message(wse.message)
@@ -46,10 +49,11 @@ def mock(api, version, port, https_port):
         _print_message("Could not start WireMock instance. Please see log file for more details: {}".format(wme.message))
 
 
-def _mock(api, version, port, https_port):
+def _mock(api, version, port, https_port, https_keystore, keystore_password):
     playback_dir = workspace.get_dir_for_service(api, version)
     log_file_location = workspace.get_log_file_location_for(api, version)
-    instance = wiremock.start_mocking(playback_dir, log_file_location, port, https_port)
+    instance = wiremock.start_mocking(playback_dir, log_file_location, port, https_port, https_keystore,
+                                      keystore_password)
     return instance
 
 
@@ -59,9 +63,11 @@ def _mock(api, version, port, https_port):
 @argh.arg('--version', default=None, help='Version of recorded API')
 @argh.arg('--port', default=0, help='HTTP port to use')
 @argh.arg('--https-port', default=0, help='HTTPS port to use')
+@argh.arg('--https-keystore', default='', help='keystore file containing an SSL certificate')
+@argh.arg('--keystore-password', default='', help='Password to the keystore, if something other than password.')
 @validate_directory
 @initialize_directory
-def record(url, name, version, port, https_port):
+def record(url, name, version, port, https_port, https_keystore=None, keystore_password=None):
     """
     Start an instance to record the calls to the specified URL. The recorded interactions will be stored in the
     directory 'recordings/[name]/[version].
@@ -69,18 +75,20 @@ def record(url, name, version, port, https_port):
     *Warning:* If 'recordings/[name]/[version]' already exists, some existing content may be overwritten.
     """
     try:
-        instance = _record(url, name, version, port, https_port)
+        instance = _record(url, name, version, port, https_port, https_keystore, keystore_password)
         _print_table([instance])
     except wiremock.WireMockError as wme:
-        _print_message("Could not start WireMock instance. Please see log file for more details: {}".format(wme.message))
+        _print_message("Could not start WireMock instance. Please see log file for more details: {}"
+                       .format(wme.message))
 
 
-def _record(url, name, version, port, https_port):
+def _record(url, name, version, port, https_port, https_keystore, keystore_password):
     if not version:
         version = time.time()
     rec_dir = workspace.get_dir_for_recording(name, version)
     log_file_location = workspace.get_log_file_location_for(name, version)
-    instance = wiremock.start_recording(rec_dir, log_file_location, port, https_port, url)
+    instance = wiremock.start_recording(rec_dir, log_file_location, port, https_port, url, https_keystore,
+                                        keystore_password)
     return instance
 
 
@@ -102,16 +110,22 @@ def start_group(group_file):
         wmm_def = group[name]
         if wmm_def['type'] == 'mock':
             print("starting mock for {}".format(name))
-            instance = _mock(wmm_def['api'], wmm_def['version'], wmm_def['port'], wmm_def['https-port'])
+            instance = _mock(wmm_def['api'], wmm_def['version'], wmm_def['port'], wmm_def['https-port'],
+                             wmm_def.get('https-keystore', None),
+                             wmm_def.get('keystore-password', None))
             instances.append(instance)
         elif wmm_def['type'] == 'record':
             print("starting record for {}".format(name))
-            instance = _record(wmm_def['url'], wmm_def['name'], wmm_def['version'], wmm_def['port'], wmm_def['https-port'])
+            instance = _record(wmm_def['url'], wmm_def['name'], wmm_def['version'], wmm_def['port'],
+                               wmm_def['https-port'],
+                               wmm_def.get('https-keystore', None),
+                               wmm_def.get('keystore-password', None))
             instances.append(instance)
         else:
             _print_message("Could not start {}: invalid type.".format(name))
 
     _print_table(instances)
+
 
 @argh.decorators.named('stop')
 @validate_directory
@@ -123,6 +137,7 @@ def stop():
     instances = wiremock.get_instances()
     for proc in instances:
         proc.terminate()
+
 
 @argh.decorators.named('status')
 @validate_directory
@@ -137,6 +152,7 @@ def status():
         _print_table(instances)
     else:
         _print_message("No running instances.")
+
 
 @argh.decorators.named('setup')
 def setup_wmm_in_pwd():
@@ -171,6 +187,7 @@ def main():
     parser = argh.ArghParser()
     parser.add_commands([record, mock, start_group, stop, status, setup_wmm_in_pwd])
     parser.dispatch()
+
 
 if __name__ == '__main__':
     main()

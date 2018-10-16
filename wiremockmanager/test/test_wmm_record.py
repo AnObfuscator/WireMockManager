@@ -41,7 +41,7 @@ class WmmRecordTest(unittest.TestCase):
         workspace_mock.initialize.assert_not_called()
         workspace_mock.get_dir_for_recording.assert_called_once_with('test-api', 'test-version')
         workspace_mock.get_log_file_location_for.assert_called_once_with('test-api', 'test-version')
-        wiremock_mock.start_recording.assert_called_once_with('recording/dir', 'some/log/file.log', 1234, 5678, 'http://some.url/')
+        wiremock_mock.start_recording.assert_called_once_with('recording/dir', 'some/log/file.log', 1234, 5678, 'http://some.url/', None, None)
         print_table_mock.assert_called_once()
         print_msg_mock.assert_not_called()
 
@@ -61,7 +61,7 @@ class WmmRecordTest(unittest.TestCase):
         workspace_mock.initialize.assert_not_called()
         workspace_mock.get_dir_for_recording.assert_called_once_with('test-api', 111111)
         workspace_mock.get_log_file_location_for.assert_called_once_with('test-api', 111111)
-        wiremock_mock.start_recording.assert_called_once_with('recording/dir', 'some/log/file.log', 1234, 5678, 'http://some.url/')
+        wiremock_mock.start_recording.assert_called_once_with('recording/dir', 'some/log/file.log', 1234, 5678, 'http://some.url/', None, None)
         print_table_mock.assert_called_once()
         print_msg_mock.assert_not_called()
 
@@ -79,7 +79,7 @@ class WmmRecordTest(unittest.TestCase):
         workspace_mock.initialize.assert_not_called()
         workspace_mock.get_dir_for_recording.assert_called_once_with(None, 'test-version')
         workspace_mock.get_log_file_location_for.assert_called_once_with(None, 'test-version')
-        wiremock_mock.start_recording.assert_called_once_with('recording/dir', 'some/log/file.log', 1234, 5678, 'http://some.url/')
+        wiremock_mock.start_recording.assert_called_once_with('recording/dir', 'some/log/file.log', 1234, 5678, 'http://some.url/', None, None)
         print_table_mock.assert_called_once()
         print_msg_mock.assert_not_called()
 
@@ -98,7 +98,7 @@ class WmmRecordTest(unittest.TestCase):
         workspace_mock.initialize.assert_not_called()
         workspace_mock.get_dir_for_recording.assert_called_once_with('test-api', 'test-version')
         workspace_mock.get_log_file_location_for.assert_called_once_with('test-api', 'test-version')
-        wiremock_mock.start_recording.assert_called_once_with('recording/dir', 'some/log/file.log', 1234, 5678, 'http://some.url/')
+        wiremock_mock.start_recording.assert_called_once_with('recording/dir', 'some/log/file.log', 1234, 5678, 'http://some.url/', None, None)
         print_table_mock.assert_not_called()
         print_msg_mock.assert_called_once_with('Could not start WireMock instance. Please see log file for more details: {}'.format('error.log'))
 
@@ -136,6 +136,6 @@ class WmmRecordTest(unittest.TestCase):
         workspace_mock.initialize.assert_called_once()
         workspace_mock.get_dir_for_recording.assert_called_once_with('test-api', 'test-version')
         workspace_mock.get_log_file_location_for.assert_called_once_with('test-api', 'test-version')
-        wiremock_mock.start_recording.assert_called_once_with('recording/dir', 'some/log/file.log', 1234, 5678, 'http://some.url/')
+        wiremock_mock.start_recording.assert_called_once_with('recording/dir', 'some/log/file.log', 1234, 5678, 'http://some.url/', None, None)
         print_table_mock.assert_called_once()
         print_msg_mock.assert_not_called()
